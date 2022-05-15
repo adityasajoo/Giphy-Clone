@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px;
+    padding: 50px;
+    justify-content: center;
+}
+
+.gifs{
+    max-width: 300px;
+    margin: 2px;
+}
