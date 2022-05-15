@@ -1,9 +1,10 @@
-import giphy from './giphy.svg';
 import './App.css';
 import { useEffect, useState, Suspense, lazy, useRef } from 'react';
 import axios from 'axios';
 import Loader from './components/Loader';
-// import GifList from './components/GifList';
+import React from 'react';
+const giphy = require("./giphy.svg") as string;
+
 const GifList = lazy(() => import('./components/GifList'));
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
-    offset.current=0;
-    setIsFetching(true)
+    offset.current = 0;
+    setIsFetching(true);
     try {
       let url;
       if (search != '') {
@@ -27,7 +28,7 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-    setIsFetching(false)
+    setIsFetching(false);
   };
 
   useEffect(() => {
@@ -63,9 +64,9 @@ function App() {
       } else url = `/.netlify/functions/getGifs?offset=${offset.current}`;
 
       const res = await axios.get(url);
-      console.log("Current --->",gifs);
-      console.log("Incoming --->",res.data.data);
-      setGifs(() => {
+      console.log('Current --->', gifs);
+      console.log('Incoming --->', res.data.data);
+      setGifs((): any => {
         return [...gifs, ...res.data.data];
       });
     } catch (error) {
@@ -84,8 +85,6 @@ function App() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
-
-
 
   return (
     <div className='App'>

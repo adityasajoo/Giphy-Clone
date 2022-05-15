@@ -1,13 +1,17 @@
 import React from 'react';
 import './GifList.css';
 
-const GifList = ({ gifs }) => {
+type Props = {
+  gifs: any;
+};
+
+const GifList = ({ gifs }: Props) => {
   console.log(gifs);
 
   return (
     <div className='container'>
       {gifs &&
-        gifs.map(gif => (
+        gifs.map((gif: any) => (
           <img className='gifs' key={gif.id} src={gif.images.original.url} />
         ))}
     </div>
