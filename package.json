@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "netlify-lambda build .netlify/functions && react-scripts build",
+    "build": "netlify-lambda build .netlify/functions && CI= react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "netlify-lambda serve .netlify/functions"
