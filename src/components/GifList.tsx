@@ -6,14 +6,11 @@ type Gif = {
   image: string;
 };
 
-
 type Gifs = {
   gifs: Gif[];
 };
 
 const GifList = ({ gifs }: Gifs) => {
-  console.log("gifs", gifs);
-
   return (
     <div className='container'>
       {gifs &&
