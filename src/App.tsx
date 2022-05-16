@@ -3,7 +3,8 @@ import { useEffect, useState, Suspense, lazy, useRef } from 'react';
 import axios from 'axios';
 import Loader from './components/Loader';
 import React from 'react';
-const giphy = require('./giphy.svg') as string;
+// import giphy from './giphy.svg'
+const giphy = require('./giphy.svg') ;
 
 const GifList = lazy(() => import('./components/GifList'));
 
@@ -13,7 +14,6 @@ function App() {
   const offset = useRef(0);
   const [isFetching, setIsFetching] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
 
   const fetchData = async () => {
     offset.current = 0;
@@ -84,12 +84,12 @@ function App() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
-
+  console.log('G', giphy);
   return (
     <div className='App'>
       <div className='searchBar'>
         <div className='icon'>
-          <img src={giphy} alt='logo' className='logo' />
+          {/* <img src={giphy} alt='logo' className='logo' /> */}
           <p className='logoText'>GIPHY</p>
         </div>
         <input

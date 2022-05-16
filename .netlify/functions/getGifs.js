@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
     const d = data.map(datum => {
       return {
         id: datum.id,
-        image:datum.images.original.url
+        image: datum.images.original.url,
       };
     });
     console.log(d);
