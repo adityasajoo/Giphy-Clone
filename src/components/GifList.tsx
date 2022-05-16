@@ -1,12 +1,18 @@
 import React from 'react';
 import './GifList.css';
 
-type Props = {
-  gifs: any;
+type Gif = {
+  id: string;
+  image: string;
 };
 
-const GifList = ({ gifs }: Props) => {
-  console.log(gifs);
+
+type Gifs = {
+  gifs: Gif[];
+};
+
+const GifList = ({ gifs }: Gifs) => {
+  console.log("gifs", gifs);
 
   return (
     <div className='container'>

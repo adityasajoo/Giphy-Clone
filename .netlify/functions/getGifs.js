@@ -7,7 +7,6 @@ exports.handler = async (event, context) => {
     ? event.queryStringParameters.offset
     : 0;
   let url;
-  // const url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${event.queryStringParameters.search}&limit=10`
   if (search) {
     url = `https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${search}&limit=9&offset=${offset}`;
   } else
@@ -15,6 +14,14 @@ exports.handler = async (event, context) => {
 
   try {
     const res = await axios.get(url);
+    const data = res.data.data;
+    const d = data.map(datum => {
+      return {
+        id: datum.id,
+        image:datum.images.original.url
+      };
+    });
+    console.log(d);
     return {
       statusCode: 200,
       body: JSON.stringify({

@@ -3,7 +3,7 @@ import { useEffect, useState, Suspense, lazy, useRef } from 'react';
 import axios from 'axios';
 import Loader from './components/Loader';
 import React from 'react';
-const giphy = require("./giphy.svg") as string;
+const giphy = require('./giphy.svg') as string;
 
 const GifList = lazy(() => import('./components/GifList'));
 
@@ -13,6 +13,7 @@ function App() {
   const offset = useRef(0);
   const [isFetching, setIsFetching] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
 
   const fetchData = async () => {
     offset.current = 0;
@@ -64,8 +65,6 @@ function App() {
       } else url = `/.netlify/functions/getGifs?offset=${offset.current}`;
 
       const res = await axios.get(url);
-      console.log('Current --->', gifs);
-      console.log('Incoming --->', res.data.data);
       setGifs((): any => {
         return [...gifs, ...res.data.data];
       });
