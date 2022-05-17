@@ -1,23 +1,34 @@
 import React from 'react';
+import { Gif } from '../type';
 import './GifList.css';
 
-type Gif = {
-  id: string;
-  image: string;
-};
-
-type Gifs = {
+type Props = {
   gifs: Gif[];
+  observer: any;
+  lastGifsElementRef: any;
 };
 
-const GifList = ({ gifs }: Gifs) => {
-  console.log("GIFS",gifs)
+const GifList = ({ gifs, observer, lastGifsElementRef }: Props) => {
   return (
     <div className='container'>
       {gifs &&
-        gifs.map((gif: any) => (
-          <img className='gifs' key={gif.id} src={gif.image} />
-        ))}
+        gifs.map((gif: Gif, index: number) => {
+          if (gifs.length === index + 1) {
+            return (
+              <img
+                className='gifs'
+                ref={lastGifsElementRef}
+                key={gif.id}
+                src={gif.image}
+                alt="Gif"
+              />
+            );
+          } else {
+            return (
+              <img className='gifs' key={gif.id + gif.image} src={gif.image} alt="Gif"/>
+            );
+          }
+        })}
     </div>
   );
 };

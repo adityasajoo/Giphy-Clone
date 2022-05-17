@@ -1,108 +1,59 @@
 import './App.css';
-import { useEffect, useState, Suspense, lazy, useRef } from 'react';
-import axios from 'axios';
+import { useState, lazy, useRef, useCallback } from 'react';
 import Loader from './components/Loader';
 import React from 'react';
-// import giphy from './giphy.svg'
-const giphy = require('./giphy.svg');
+import useGifSearch from './components/useGifSearch';
 
 const GifList = lazy(() => import('./components/GifList'));
 
 function App() {
-  const [search, setSearch] = useState('');
-  const [gifs, setGifs] = useState([]);
-  const offset = useRef(0);
-  const [isFetching, setIsFetching] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [search, setSearch] = useState<string>('');
+  const [offset, setOffset] = useState<number>(0);
+  const { gifs, error, loading } = useGifSearch({ search, offset });
 
-  const fetchData = async () => {
-    offset.current = 0;
-    setIsFetching(true);
-    try {
-      let url;
-      if (search != '') {
-        url = `/.netlify/functions/getGifs?search=${search}&offset=${offset.current}`;
-      } else url = `/.netlify/functions/getGifs?offset=${offset.current}`;
+  const observer = useRef<any>();
+  const lastGifsElementRef = useCallback(
+    (node: any) => {
+      if (loading) return;
 
-      const res = await axios.get(url);
-      setGifs(res.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-    setIsFetching(false);
-  };
-
-  useEffect(() => {
-    console.log('First use effect');
-    fetchData();
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleScroll = () => {
-    if (
-      Math.ceil(window.innerHeight + document.documentElement.scrollTop) !==
-        document.documentElement.offsetHeight ||
-      isFetching
-    )
-      return;
-    setIsFetching(true);
-  };
-
-  useEffect(() => {
-    console.log('Fetch Use effect');
-    if (!isFetching) return;
-    fetchMoreListItems();
-  }, [isFetching]);
-
-  const fetchMoreListItems = async () => {
-    offset.current += 10;
-
-    try {
-      let url;
-      if (search != '') {
-        url = `/.netlify/functions/getGifs?search=${search}&offset=${offset.current}`;
-      } else url = `/.netlify/functions/getGifs?offset=${offset.current}`;
-
-      const res = await axios.get(url);
-      setGifs((): any => {
-        return [...gifs, ...res.data.data];
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          setOffset(prev => prev + 20);
+        }
       });
-    } catch (error) {
-      console.log(error);
-    }
+      if (node) observer.current.observe(node);
+    },
+    [loading]
+  );
 
-    setIsFetching(false);
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setOffset(0);
   };
 
-  useEffect(() => {
-    console.log('Search use effect');
-    const delayDebounceFn = setTimeout(() => {
-      console.log(search);
-      fetchData();
-    }, 3000);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [search]);
-  console.log('G', giphy);
   return (
     <div className='App'>
       <div className='searchBar'>
         <div className='icon'>
-          {/* <img src={giphy} alt='logo' className='logo' /> */}
           <p className='logoText'>GIPHY</p>
         </div>
         <input
           className='search'
           type='text'
           placeholder='Search for your favourite'
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => handleSearch(e.target.value)}
           value={search}
         />
       </div>
-      <Suspense fallback={<Loader />}>
-        <GifList gifs={gifs} />
-      </Suspense>
+
+      <GifList
+        gifs={gifs}
+        observer={observer}
+        lastGifsElementRef={lastGifsElementRef}
+      />
+      {loading && <Loader />}
+      {error && <p>"Something went wrong."</p>}
     </div>
   );
 }
