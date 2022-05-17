@@ -4,7 +4,7 @@ import axios from 'axios';
 import Loader from './components/Loader';
 import React from 'react';
 // import giphy from './giphy.svg'
-const giphy = require('./giphy.svg') ;
+const giphy = require('./giphy.svg');
 
 const GifList = lazy(() => import('./components/GifList'));
 

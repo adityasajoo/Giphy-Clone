@@ -11,11 +11,12 @@ type Gifs = {
 };
 
 const GifList = ({ gifs }: Gifs) => {
+  console.log("GIFS",gifs)
   return (
     <div className='container'>
       {gifs &&
         gifs.map((gif: any) => (
-          <img className='gifs' key={gif.id} src={gif.images.original.url} />
+          <img className='gifs' key={gif.id} src={gif.image} />
         ))}
     </div>
   );

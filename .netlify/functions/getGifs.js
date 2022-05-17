@@ -21,11 +21,10 @@ exports.handler = async (event, context) => {
         image: datum.images.original.url,
       };
     });
-    console.log(d);
     return {
       statusCode: 200,
       body: JSON.stringify({
-        data: res.data.data,
+        data: d,
       }),
       headers: {
         'Access-Control-Allow-Origin': '*',
